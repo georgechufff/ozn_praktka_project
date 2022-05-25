@@ -8,50 +8,78 @@ top = []
 
 #Дефолтное имя игрока
 UserName = "User"
+
 print("Введите ваше имя: ")
+#Ввод имени игрока с клавиатуры в консоли
 UserName = input()
 
 #Параметры окна игры
 WIDTH_WINDOW = 1000
 HEIGHT_WINDOW = 800
+
+#Ввод параметров окна с клавиатуры в консоли
 print("Введите желаемую ширину окна: ")
 WIDTH_WINDOW = int(input())
 print("Введите желаемую длину окна: ")
 HEIGHT_WINDOW = int(input())
 
-#Начальное направление движения
+# Начальное направление движения
+# old_v - прежний вектор движения, v - новый
 old_v = (0,0)
 v = (0,0)
 
+# функция преобразования получаемой с сервера информации
+# из формата - "<'строковые данные','строковые данные'>"
+# в формат массива из этих данных - [данные,данные]
 def find(s):
     otkr = None
     for i in range(len(s)):
+        # Найдена окрывающая скобка - фиксируем ее индекс
         if s[i] == '<':
             otkr = i
+        # Найдена закрывающая скобка - фиксируем ее индекс
         if s[i] == '>' and otkr != None:
             zakr = i
+            # Формируем массив полученной инфы с сервера
             res = s[otkr+1:zakr]
+            # Возвращаем данные как результат метода
             return res
     return ''
 
+# Функция отрисовки имени игрока на кружочке
+# Принимаемые параметры x - коорд. x, y - коорд. y, r - размер кружочка, name - имя игрока
 def write_name(x, y, r, name):
     font = pygame.font.Font(None, r)
     text = font.render(name,True, (0,0,0)) 
     rect = text.get_rect(center=(x,y))
     screen.blit(text,rect)
 
+# Функция отрисовки имени, очков игровка и позиции в топе
+# Ориентир по данному игроку
 def print_pl_info(name, r, i):
-    font = pygame.font.Font(None, 50)
-    text = font.render(name + ' ' + str(r),True, (0,0,0)) 
-    rect = text.get_rect(topleft = (WIDTH_WINDOW-250,70 + 50*i))
+    font = pygame.font.Font(None, 30)
+    # Отрисовка имени игрока и его позиции в топе
+    text = font.render(str(i+1) + ". " +name,True, (0,0,0)) 
+    rect = text.get_rect(topleft = (WIDTH_WINDOW-230,70 + 30*i))
     screen.blit(text,rect)
-
+    # Отрисовка очков игрока
+    text = font.render(str(r),True, (0,0,0)) 
+    rect = text.get_rect(topright = (WIDTH_WINDOW-20,70 + 30*i))
+    screen.blit(text,rect)
+    
 def print_top():
+    # Индекс данного игрока в топе
     p = 0
+    # Абсолютная позиция того или иного игрока в топе
     in_top = 0
-    font = pygame.font.Font(None, 50)
-    text = font.render("Топ игроков:",True, (0,0,0)) 
-    rect = text.get_rect(topleft = (WIDTH_WINDOW-250,20))
+    
+    font = pygame.font.Font(None, 30)
+    # Отрисовка 
+    text = font.render("Топ игроков",True, (0,0,0)) 
+    rect = text.get_rect(topleft = (WIDTH_WINDOW-230,20))
+    screen.blit(text,rect)
+    text = font.render("Очки",True, (0,0,0)) 
+    rect = text.get_rect(topright = (WIDTH_WINDOW-20,20))
     screen.blit(text,rect)
     for i in range(len(top)):
         if (top[i][0] == UserName):
