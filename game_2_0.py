@@ -74,23 +74,31 @@ def print_top():
     in_top = 0
     
     font = pygame.font.Font(None, 30)
-    # Отрисовка 
+    # Отрисовка надписей Топ игроков и Очки
     text = font.render("Топ игроков",True, (0,0,0)) 
     rect = text.get_rect(topleft = (WIDTH_WINDOW-230,20))
     screen.blit(text,rect)
     text = font.render("Очки",True, (0,0,0)) 
     rect = text.get_rect(topright = (WIDTH_WINDOW-20,20))
     screen.blit(text,rect)
+    # Поиск индекса игрока в топе
     for i in range(len(top)):
         if (top[i][0] == UserName):
             p = i
             break
-    for j in range(p):
+    # Сколько игроков до нас отрисовать
+    tmp = p if p <= 3 else 3
+    for j in range(tmp):
         curr = top[p-j-1]
         print_pl_info(curr[0], curr[1], in_top)
         in_top+= 1;
+        
+    # Нас отрисовать
     print_pl_info(top[p][0],top[p][1],p)
-    for k in range(len(top)-p if len(top)-p <= 3 else 3):
+    
+    # Сколько игроков после нас отрисовать
+    tmp = len(top)-p if len(top)-p <= 3 else 3
+    for k in range(tmp):
         curr = top[p+k]
         print_pl_info(curr[0], curr[1], in_top)
         in_top+= 1;
@@ -166,8 +174,6 @@ GameGrid = Grid(screen)
 
 running = True
 
-
-
 while running:
     #Обработка событиый
     for event in pygame.event.get():
@@ -217,7 +223,7 @@ while running:
         GameGrid.draw()
         draw_opponents(data[1:-2])
         myPl.draw()
-    print_top()
+        print_top()
     pygame.display.update()
 
 #Закрытие игрового окна
