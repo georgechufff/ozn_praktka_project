@@ -309,21 +309,3 @@ while running:
 pygame.quit()
 
 main_socket.close()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
